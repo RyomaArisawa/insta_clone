@@ -1,4 +1,5 @@
 import 'package:insta_clone/models/db/database_manager.dart';
+import 'package:insta_clone/models/location/location_manager.dart';
 import 'package:insta_clone/models/repositories/post_repository.dart';
 import 'package:insta_clone/models/repositories/user_repository.dart';
 import 'package:insta_clone/viewmodels/post_view_model.dart';
@@ -17,6 +18,9 @@ List<SingleChildWidget> independentModels = [
   Provider<DatabaseManager>(
     create: (_) => DatabaseManager(),
   ),
+  Provider<LocationManager>(
+    create: (_) => LocationManager(),
+  ),
 ];
 
 List<SingleChildWidget> dependentModels = [
@@ -24,8 +28,9 @@ List<SingleChildWidget> dependentModels = [
     update: (_, databaseManager, repository) =>
         UserRepository(databaseManager: databaseManager),
   ),
-  ProxyProvider<DatabaseManager, PostRepository>(
-    update: (_, databaseManager, repository) => PostRepository(),
+  ProxyProvider2<DatabaseManager, LocationManager, PostRepository>(
+    update: (_, databaseManager, locationManager, repository) => PostRepository(
+        databaseManager: databaseManager, locationManager: locationManager),
   ),
 ];
 
